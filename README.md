@@ -1,2 +1,2 @@
 # CircularQueue
-A generic circular queue data structure in Swirt
+A generic circular queue data structure in Swift
