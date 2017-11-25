@@ -1,4 +1,4 @@
-/// Fixed-capacity circular queue
+/// Fixed-capacity circular queue for value types
 public class CircularQueue<T> {
     var count: Int = 0
     var readIndex: Int = 0
