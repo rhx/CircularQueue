@@ -35,6 +35,7 @@ public class CircularQueue<T> {
     /// - Returns: the oldest element that was put into the queue
     public func dequeue() -> T {
         precondition(count > 0)
+        count -= 1
         defer {
             readIndex += 1
             if readIndex >= capacity { readIndex -= capacity }
