@@ -1,8 +1,8 @@
-/// Fixed-capacity circular queue for value types
+/// Fixed-capacity circular queue
 public class CircularQueue<T> {
     var count: Int = 0
     var readIndex: Int = 0
-    let storageBase: UnsafeMutablePointer<T>
+    var storage: ContiguousArray<T>
 
     /// maximum capacity of the queue
     public let capacity: Int
@@ -11,12 +11,9 @@ public class CircularQueue<T> {
     ///
     /// - Parameter n: number of elements that fit into the queue
     public init(capacity n: Int) {
+        storage = ContiguousArray()
+        storage.reserveCapacity(n)
         capacity = n
-        storageBase = UnsafeMutablePointer<T>.allocate(capacity: n)
-    }
-
-    deinit {
-        storageBase.deallocate(capacity: capacity)
     }
 
     /// Append an element to the end of the queue
@@ -26,7 +23,13 @@ public class CircularQueue<T> {
         precondition(count < capacity)
         let offset = readIndex + count
         let i = offset < capacity ? offset : offset - capacity
-        storageBase[i] = element
+        let n = storage.count
+        if i < n {
+            storage[i] = element
+        } else {
+            assert(i == n)
+            storage.append(element)
+        }
         count += 1
     }
 
@@ -40,6 +43,6 @@ public class CircularQueue<T> {
             readIndex += 1
             if readIndex >= capacity { readIndex -= capacity }
         }
-        return storageBase[readIndex]
+        return storage[readIndex]
     }
 }
